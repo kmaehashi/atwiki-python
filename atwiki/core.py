@@ -56,7 +56,10 @@ class AtWikiAPI(object):
 
   def get_source(self, page_id, generation=0):
     soup = self._request(self._uri.backup_source(page_id, generation))
-    return soup.find('pre', attrs={'class': 'cmd_backup'}).text.replace('\r', '')
+    pre = soup.find('pre', attrs={'class': 'cmd_backup'})
+    if not pre:
+      raise IndexError('page {0}: generation {1} out of range'.format(page_id, generation))
+    return pre.text.replace('\r', '')
 
   def search(self, keyword, is_and=True):
     soup = self._request(self._uri.search(keyword, is_and))

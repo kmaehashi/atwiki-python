@@ -33,6 +33,9 @@ class AtWikiAPITest(TestCase):
     self.assertEqual(self._api.get_source(15, 0),
                      '"テスト1"<br>&\n"テスト2"<br>&')
 
+  def test_get_source_invalid(self):
+    self.assertRaises(IndexError, self._api.get_source, 15, -1)
+
   def test_search(self):
     results = list(self._api.search('SearchKeyword01 SearchKeyword02'))
     self.assertEqual(len(results), 1)
