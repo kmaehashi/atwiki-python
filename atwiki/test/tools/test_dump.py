@@ -10,4 +10,4 @@ from .. import TEST_BASE_URI
 
 class AtWikiDumpTest(TestCase):
   def test_simple(self):
-    self.assertRaises(FileNotFoundError, AtWikiDump.start, ['-o', '/tmp/non/existing/directory', TEST_BASE_URI])
+    self.assertRaises(IOError, AtWikiDump.start, ['-o', '/tmp/non/existing/directory', TEST_BASE_URI])
