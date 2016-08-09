@@ -49,3 +49,7 @@ class AtWikiAPITest(TestCase):
     self.assertEqual(results[0]['snippet'], 'SearchKeyword01\nSearchKeyword02')
     self.assertEqual(results[1]['name'], 'Test_atwiki.test.test_core:AtWikiAPITest:test_search_or')
     self.assertEqual(results[1]['snippet'], 'SearchKeyword02')
+
+  def test_search_none(self):
+    results = list(self._api.search('no_result_expected_for_this'))
+    self.assertEqual(len(results), 0)

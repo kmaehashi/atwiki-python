@@ -66,6 +66,7 @@ class AtWikiAPI(object):
     lis = soup.find('div', id='wikibody').findAll('li')[:-1]  # drop last item (link to http://atwiki.jp/wiki/keyword)
     for li in lis:
       a = li.find('a')
+      if not a: continue
       name = a.text
       snippet = None
       for sib in a.next_siblings:
