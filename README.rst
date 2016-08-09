@@ -14,6 +14,8 @@ atwiki-python
 
 ``atwiki-python`` is a client library to access `@wiki <https://atwiki.jp/>`_ from Python.
 
+This package also includes ``atwiki-dump`` command to dump source from @wiki wiki site.
+
 Install
 -------
 
@@ -29,21 +31,35 @@ Requirements
 Usage
 -----
 
+``atwiki-dump`` Tool
+~~~~~~~~~~~~~~~~~~~~
+
+Dump source and page name for each page in the wiki site.
+
+::
+
+  atwiki-dump -o /tmp/dump_dir http://www65.atwiki.jp/python-client/
+
+Python API
+~~~~~~~~~~
+
+Python API provides access to @wiki features.
+
 .. code:: python
 
   from atwiki import *
 
   api = AtWikiAPI(AtWikiURI('http://www65.atwiki.jp/python-client/'))
 
-  # List of pages.
+  # Show list of pages.
   for page in api.get_list():
     print(page['name'])
 
-  # List of pages tagged with 'tag01'.
+  # Show list of pages tagged with 'tag01'.
   for page in api.get_list('tag01'):
     print(page['name'])
 
-  # Source of page ID 14
+  # Show source of page ID 14.
   print(api.get_source(14))
 
 License
