@@ -9,6 +9,10 @@ from atwiki.uri import AtWikiURI
 from . import TEST_BASE_URI
 
 class AtWikiURITest(TestCase):
+  def test_str(self):
+    base = TEST_BASE_URI
+    self.assertEqual(base, str(AtWikiURI(base)))
+
   def test_path_input(self):
     base = TEST_BASE_URI
     uri = AtWikiURI(base)
