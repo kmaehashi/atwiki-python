@@ -5,9 +5,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 try:
   # Python 3
   import urllib.parse as urlparse
+  from urllib.parse import quote as urlquote
 except:
   # Python 2
   import urlparse
+  from urllib import quote as urlquote
 
 import os.path
 
@@ -51,12 +53,12 @@ class AtWikiURI(object):
   def search(self, keyword=None, is_and=True):
     if keyword is not None:
       andor = 'and' if is_and else 'or'
-      return '{0}/?cmd=search&keyword={1}&andor={2}'.format(self._base, keyword, andor)
+      return '{0}/?cmd=search&keyword={1}&andor={2}'.format(self._base, urlquote(keyword), andor)
     else:
       return '{0}/search'.format(self._base)
 
   def tag(self, tag_name='', index=0):
-    return '{0}/tag/{1}?p={2}'.format(self._base, tag_name, index)
+    return '{0}/tag/{1}?p={2}'.format(self._base, urlquote(tag_name), index)
 
   def new(self):
     return '{0}/new'.format(self._base)
@@ -108,7 +110,7 @@ class AtWikiURI(object):
     return '{0}/diffx/{1}.html'.format(self._base, page_id)
 
   def word(self, page_id, keyword):
-    return '{0}/?cmd=word&pageid={1}&word={2}&type=normal'.format(self._base, page_id, keyword)
+    return '{0}/?cmd=word&pageid={1}&word={2}&type=normal'.format(self._base, page_id, urlquote(keyword))
 
   def edit(self, page_id, menu=True):
     mode = 'editx' if menu else 'editxx'
