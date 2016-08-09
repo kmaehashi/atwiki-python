@@ -1,12 +1,23 @@
+|Travis|_ |Coveralls|_ |PyPi|_
+
+.. |Travis| image:: https://api.travis-ci.org/kmaehashi/atwiki-python.svg?branch=master
+.. _Travis: https://travis-ci.org/kmaehashi/atwiki-python
+
+.. |Coveralls| image:: https://coveralls.io/repos/kmaehashi/atwiki-python/badge.svg?branch=master&service=github
+.. _Coveralls: https://coveralls.io/r/kmaehashi/atwiki-python
+
+.. |PyPi| image:: https://badge.fury.io/py/atwiki-python.svg
+.. _PyPi: https://badge.fury.io/py/atwiki-python
+
 atwiki-python
 =============
 
-``atwiki-python`` is a client library to access [@wiki](https://atwiki.jp) from Python.
+``atwiki-python`` is a client library to access `@wiki <https://atwiki.jp/>`_ from Python.
 
 Install
 -------
 
-..
+::
 
   pip install .
 
