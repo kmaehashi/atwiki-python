@@ -66,6 +66,10 @@ Python API provides access to @wiki features.
   # Show source of page ID 14.
   print(api.get_source(14))
 
+  # Show results of wiki search.
+  for result in api.search('test'):
+    print(result)
+
 License
 -------
 
