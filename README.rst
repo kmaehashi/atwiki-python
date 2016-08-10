@@ -21,7 +21,7 @@ Install
 
 ::
 
-  pip install .
+  pip install atwiki-python
 
 Requirements
 ------------
