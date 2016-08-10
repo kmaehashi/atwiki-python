@@ -44,6 +44,8 @@ class AtWikiAPI(object):
         if m:
           (total, cursor_begin, cursor_end) = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
           is_end = (total == cursor_end)
+        else:
+          is_end = True
       for link in links:
         page_id = self._uri.get_page_id_from_uri(link.attrs['href'])
         page_name = link.text.strip()
