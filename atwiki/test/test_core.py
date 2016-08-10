@@ -23,6 +23,12 @@ class AtWikiAPITest(TestCase):
     self.assertEqual(results[0]['id'], 18)
     self.assertEqual(results[0]['name'], 'Test_atwiki.test.test_core:AtWikiAPITest:test_get_list_tag')
 
+  def test_get_tags(self):
+    results = list(self._api.get_tags())
+    self.assertEqual(len(results), 1)
+    self.assertEqual(results[0]['name'], 'tag01')
+    self.assertEqual(results[0]['weight'], 3)
+
   def test_get_source(self):
     self.assertEqual(self._api.get_source(14, 0),
                      'テスト1\nテスト2\n\nテスト3\nテスト4\n\n\nテスト5')

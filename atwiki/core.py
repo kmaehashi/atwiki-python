@@ -54,6 +54,25 @@ class AtWikiAPI(object):
       index += 1
       time.sleep(self._sleep)
 
+  def get_tags(self):
+    index = 0
+    while True:
+      count = 0
+      soup = self._request(self._uri.tag('', index))
+      links = soup.find('div', attrs={'class': 'cmd_tag'}).select('a.tag')
+      for link in links:
+        tag_name = link.text
+        tag_weight = 0
+        for clazz in link.attrs['class']:
+          if clazz.startswith('weight'):
+            tag_weight = int(clazz[6:])
+            break
+        count += 1
+        yield {'name': tag_name, 'weight': tag_weight}
+      if count == 0: break
+      index += 1
+      time.sleep(self._sleep)
+
   def get_source(self, page_id, generation=0):
     soup = self._request(self._uri.backup_source(page_id, generation))
     pre = soup.find('pre', attrs={'class': 'cmd_backup'})

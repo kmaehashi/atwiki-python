@@ -51,6 +51,10 @@ Python API provides access to @wiki features.
 
   api = AtWikiAPI(AtWikiURI('http://www65.atwiki.jp/python-client/'))
 
+  # Show list of tags.
+  for page in api.get_tags():
+    print(page['name'])
+
   # Show list of pages.
   for page in api.get_list():
     print(page['name'])
