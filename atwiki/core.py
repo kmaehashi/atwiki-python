@@ -82,8 +82,8 @@ class AtWikiAPI(object):
       raise IndexError('page {0}: generation {1} out of range'.format(page_id, generation))
     return pre.text.replace('\r', '')
 
-  def search(self, keyword, is_and=True):
-    soup = self._request(self._uri.search(keyword, is_and))
+  def search(self, keyword, is_and=True, wiki_syntax=False, complete=True):
+    soup = self._request(self._uri.search(keyword, is_and, wiki_syntax, complete))
     lis = soup.find('div', id='wikibody').findAll('li')[:-1]  # drop last item (link to http://atwiki.jp/wiki/keyword)
     for li in lis:
       a = li.find('a')
