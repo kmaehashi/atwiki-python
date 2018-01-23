@@ -50,10 +50,13 @@ class AtWikiURI(object):
   # Wiki-wide APIs
   ########################################
 
-  def search(self, keyword=None, is_and=True):
+  def search(self, keyword=None, is_and=True, wiki_syntax=False, complete=True):
     if keyword is not None:
       andor = 'and' if is_and else 'or'
-      return '{0}/?cmd=search&keyword={1}&andor={2}'.format(self._base, urlquote(keyword), andor)
+      search_field = 'source' if wiki_syntax else ''
+      cmpmode = 'cmp' if complete else ''
+      return '{0}/?cmd=search&keyword={1}&andor={2}&search_field={3}&cmp={4}'.format(
+          self._base, urlquote(keyword), andor, search_field, cmpmode)
     else:
       return '{0}/search'.format(self._base)
 

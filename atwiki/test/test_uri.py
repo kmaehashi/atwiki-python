@@ -26,8 +26,10 @@ class AtWikiURITest(TestCase):
     uri = AtWikiURI(base)
 
     self.assertEqual(uri.search(), '{0}/search'.format(base))
-    self.assertEqual(uri.search('test'), '{0}/?cmd=search&keyword=test&andor=and'.format(base))
-    self.assertEqual(uri.search('test', False), '{0}/?cmd=search&keyword=test&andor=or'.format(base))
+    self.assertEqual(uri.search('test'), '{0}/?cmd=search&keyword=test&andor=and&search_field=&cmp=cmp'.format(base))
+    self.assertEqual(uri.search('test', is_and=False), '{0}/?cmd=search&keyword=test&andor=or&search_field=&cmp=cmp'.format(base))
+    self.assertEqual(uri.search('test', wiki_syntax=True), '{0}/?cmd=search&keyword=test&andor=and&search_field=source&cmp=cmp'.format(base))
+    self.assertEqual(uri.search('test', complete=False), '{0}/?cmd=search&keyword=test&andor=and&search_field=&cmp='.format(base))
     self.assertEqual(uri.tag(), '{0}/tag/?p=0'.format(base))
     self.assertEqual(uri.tag('test'), '{0}/tag/test?p=0'.format(base))
     self.assertEqual(uri.tag('test', 1), '{0}/tag/test?p=1'.format(base))
