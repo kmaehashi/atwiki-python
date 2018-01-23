@@ -30,7 +30,7 @@ setup(name='atwiki-python',
           'Programming Language :: Python :: 3.5',
           'Programming Language :: Python :: 3.6',
       ],
-      packages=find_packages(exclude=['atwiki.test']),
+      packages=find_packages(),
       test_suite = 'atwiki.test',
       entry_points={
           'console_scripts': ['atwiki-dump=atwiki.tools.dump:main'],
