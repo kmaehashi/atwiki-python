@@ -31,6 +31,7 @@ setup(name='atwiki-python',
           'Programming Language :: Python :: 3.6',
       ],
       packages=find_packages(exclude=['atwiki.test']),
+      test_suite = 'atwiki.test',
       entry_points={
           'console_scripts': ['atwiki-dump=atwiki.tools.dump:main'],
       },
@@ -38,5 +39,4 @@ setup(name='atwiki-python',
           'BeautifulSoup4',
           'html5lib',
       ],
-      test_suite = 'atwiki.test',
 )
