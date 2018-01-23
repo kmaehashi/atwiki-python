@@ -36,6 +36,7 @@ setup(name='atwiki-python',
       },
       install_requires=[
           'BeautifulSoup4',
+          'html5lib',
       ],
       test_suite = 'atwiki.test',
 )

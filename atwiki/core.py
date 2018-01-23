@@ -103,4 +103,4 @@ class AtWikiAPI(object):
 
   def _request(self, url, data=None):
     req = Request(url, headers={'User-Agent': self._user_agent}, data=data)
-    return BeautifulSoup(urlopen(req).read(), 'html.parser')
+    return BeautifulSoup(urlopen(req).read(), 'html5lib')
