@@ -84,7 +84,7 @@ class AtWikiAPI(object):
 
   def search(self, keyword, is_and=True, wiki_syntax=False, complete=True):
     soup = self._request(self._uri.search(keyword, is_and, wiki_syntax, complete))
-    lis = soup.find('div', id='wikibody').findAll('li')[:-1]  # drop last item (link to http://atwiki.jp/wiki/keyword)
+    lis = soup.find('div', id='wikibody').findAll('li')[:-1]  # drop last item (link to https://atwiki.jp/wiki/<keyword>)
     for li in lis:
       a = li.find('a')
       if not a: continue
