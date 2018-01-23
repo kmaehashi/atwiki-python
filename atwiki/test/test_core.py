@@ -46,13 +46,13 @@ class AtWikiAPITest(TestCase):
     results = list(self._api.search('SearchKeyword01 SearchKeyword02'))
     self.assertEqual(len(results), 1)
     self.assertEqual(results[0]['name'], 'Test_atwiki.test.test_core:AtWikiAPITest:test_search')
-    self.assertEqual(results[0]['snippet'], 'SearchKeyword01\nSearchKeyword02')
+    self.assertEqual(results[0]['snippet'], 'SearchKeyword01  SearchKeyword02')
 
   def test_search_or(self):
     results = list(self._api.search('SearchKeyword01 SearchKeyword02', False))
     self.assertEqual(len(results), 2)
     self.assertEqual(results[0]['name'], 'Test_atwiki.test.test_core:AtWikiAPITest:test_search')
-    self.assertEqual(results[0]['snippet'], 'SearchKeyword01\nSearchKeyword02')
+    self.assertEqual(results[0]['snippet'], 'SearchKeyword01  SearchKeyword02')
     self.assertEqual(results[1]['name'], 'Test_atwiki.test.test_core:AtWikiAPITest:test_search_or')
     self.assertEqual(results[1]['snippet'], 'SearchKeyword02')
 
