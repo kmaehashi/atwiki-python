@@ -9,6 +9,8 @@ from atwiki.parser import AtWikiStripper
 INPUT = '''
 // This is a comment.
 
+&nivocideo(url) &color(#ffffff){white} and black
+
 [[Link1]] / [[Link2>URL]]
 Styles: ''bold'' \'\'\'italic\'\'\' %%del%% ''bold'' 
 Special: '' A ✔︎ ( ) { } \ / ! '' 
@@ -37,6 +39,8 @@ block 2
 '''
 
 OUTPUT = '''
+
+white and black
 
 Link1 / Link2
 Styles: bold italic del bold 
