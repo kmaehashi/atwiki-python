@@ -9,34 +9,34 @@ class AtWikiStripper(object):
   COMMENT = re.compile(r'^//')
 
   # Inline annotation: `&color(#999999){text}`, `&nicovideo(url)`
-  INLINE_ANN = re.compile(r'&[a-z_]+\(([^()]*?)\)({([^{}]+?)})?'), r'\3'
+  INLINE_ANN = re.compile(r'&[a-z_]+\(([^()]*?)\)({([^{}]+?)})?'), 3
 
   # Inline links: `[[page]]`, `[[alias>URL]]`
-  INLINE_LINK = re.compile(r'\[\[(.+?)((>|>>)(.+?))?\]\]'), r'\1'
+  INLINE_LINK = re.compile(r'\[\[(.+?)((>|>>)(.+?))?\]\]'), 1
 
   # Inline italic: `'''text'''`
-  INLINE_ITALIC = re.compile(r'\'\'\'(.+?)\'\'\''), r'\1'
+  INLINE_ITALIC = re.compile(r'\'\'\'(.+?)\'\'\''), 1
 
   # Inline bold: `''text''`
-  INLINE_BOLD = re.compile(r'\'\'(.+?)\'\''), r'\1'
+  INLINE_BOLD = re.compile(r'\'\'(.+?)\'\''), 1
 
   # Inline del: `%%text%%`
-  INLINE_DEL = re.compile(r'%%(.+?)%%'), r'\1'
+  INLINE_DEL = re.compile(r'%%(.+?)%%'), 1
 
   # Line annotation: `#right(){text}`, `#comment()`, `#region`
-  LINE_ANN = re.compile(r'^#[a-z_]+(\(([^()]*?)\)({([^{}]+?)})?)?\s*$'), r'\4'
+  LINE_ANN = re.compile(r'^#[a-z_]+(\(([^()]*?)\)({([^{}]+?)})?)?\s*$'), 4
 
   # Line horizontal line: `----`
-  LINE_HR = re.compile(r'^----\s*()$'), r'\1'
+  LINE_HR = re.compile(r'^----\s*()$'), 1
 
   # Line item list and heading: `+foo`, `-foo`, `*foo`
-  LINE_ITEMLIST = re.compile(r'^(\*+|\++|-+)(.+)$'), r'\2'
+  LINE_ITEMLIST = re.compile(r'^(\*+|\++|-+)(.+)$'), 2
 
   # Line quote: `>text`
-  LINE_QUOTE = re.compile(r'^>+(.+)$'), r'\1'
+  LINE_QUOTE = re.compile(r'^>+(.+)$'), 1
 
   # Line formatted: ` text`
-  LINE_PRE = re.compile(r'^ (.+)$'), r'\1'
+  LINE_PRE = re.compile(r'^ (.+)$'), 1
 
   # Block annotation: `#exk(){{{` ... `}}}`
   BLOCK_BEGIN_ANN = re.compile(r'^#[a-z_]+\(([^{}()]*?)\)({+)\s*$')
@@ -45,15 +45,17 @@ class AtWikiStripper(object):
   def __init__(self, source):
     self._source = source
 
-  def _inline_strip(self, line, pattern, repl):
+  def _inline_strip(self, line, pattern, group):
     while True:
       prev = line
-      line = pattern.sub(repl, line)
+      # Note: prior to Python 3.5, use of backreference of nonmatching group
+      # in replacement string raises exception.
+      line = pattern.sub(lambda m: m.group(group), line)
       if prev == line: return line
 
-  def _line_process(self, buf, line, pattern, repl):
+  def _line_process(self, buf, line, pattern, group):
     prev = line
-    line = pattern.sub(repl, line)
+    line = pattern.sub(lambda m: m.group(group), line)
     if prev == line: return False
     buf.append(line)
     return True
