@@ -24,7 +24,7 @@ class AtWikiAPI(object):
 
   def __init__(self, uri, **kwargs):
     self._uri = uri
-    self._user_agent = kwargs.get('user_agent', 'Mozilla/5.0')
+    self._user_agent = kwargs.get('user_agent', 'Mozilla/5.0 (AtWikiPython)')
     self._sleep = kwargs.get('sleep', 1)
 
   def get_list(self, tag=None):
