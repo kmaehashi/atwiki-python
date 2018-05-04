@@ -52,7 +52,7 @@ class AtWikiDump(object):
       page_src = api.get_source(page_id)
       with open(path, 'w') as f:
         f.write(page_src)
-      time.sleep(1)
+      time.sleep(10)
 
     path = '{0}/meta.json'.format(output_dir)
     print('dumping: meta data to {0}'.format(path))
