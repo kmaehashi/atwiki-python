@@ -72,6 +72,17 @@ class AtWikiAPI(object):
         count += 1
         yield {'name': tag_name, 'weight': tag_weight}
       if count == 0: break
+
+      pagerArea = soup.find('div', attrs={'class': 'cmd_tag'}).find('div')
+      if pagerArea is None:
+        # Pager area will not be shown when tag list fits in one page.
+        assert index == 0
+        break
+      pagers = pagerArea.findAll('a')
+      if len(pagers) == 1:
+        if pagers[0].attrs['href'].endswith('/?p={}'.format(index - 1)):
+          # Valid pager found, and no more tags.
+          break
       index += 1
       time.sleep(self._sleep)
 
