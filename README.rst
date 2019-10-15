@@ -38,7 +38,7 @@ Dump source and page name for each page in the wiki site.
 
 ::
 
-  atwiki-dump -o /tmp/dump_dir https://www65.atwiki.jp/python-client/
+  atwiki-dump -o /tmp/dump_dir https://w.atwiki.jp/python-client/
 
 Python API
 ~~~~~~~~~~
@@ -49,7 +49,7 @@ Python API provides access to @wiki features.
 
   from atwiki import *
 
-  api = AtWikiAPI(AtWikiURI('https://www65.atwiki.jp/python-client/'))
+  api = AtWikiAPI(AtWikiURI('https://w.atwiki.jp/python-client/'))
 
   # Show list of tags.
   for page in api.get_tags():

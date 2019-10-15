@@ -1,1 +1,1 @@
-TEST_BASE_URI = 'https://www65.atwiki.jp/python-client'
+TEST_BASE_URI = 'https://w.atwiki.jp/python-client'
