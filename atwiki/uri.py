@@ -12,6 +12,8 @@ except:
   from urllib import quote as urlquote
 
 import os.path
+import warnings
+
 
 class AtWikiURI(object):
   def __init__(self, base):
@@ -115,8 +117,23 @@ class AtWikiURI(object):
   def word(self, page_id, keyword):
     return '{0}/?cmd=word&pageid={1}&word={2}&type=normal'.format(self._base, page_id, urlquote(keyword))
 
-  def edit(self, page_id, menu=True):
-    mode = 'editx' if menu else 'editxx'
+  def edit(self, page_id, menu=None, mode=None):
+    if menu is not None:
+      warnings.warn(
+        '`menu` option will be removed in the future release. Use `mode` option instead.',
+        DeprecationWarning)
+    else:
+      menu = True
+
+    if mode is None:
+      mode = 'editx' if menu else 'editxx'
+
+    if mode not in [
+          'pedit',    # standard
+          'editx',    # simple (with menu)
+          'editxx',   # simple (without menu)
+        ]:
+      raise ValueError('invalid mode: {}'.format(mode))
     return '{0}/{1}/{2}.html'.format(self._base, mode, page_id)
 
   def rename(self, page_id):
