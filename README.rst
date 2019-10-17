@@ -31,8 +31,8 @@ Requirements
 Usage
 -----
 
-``atwiki-dump`` Tool
-~~~~~~~~~~~~~~~~~~~~
+``atwiki-dump`` Command
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Dump source and page name for each page in the wiki site.
 
@@ -53,15 +53,15 @@ Python API provides access to @wiki features.
 
   # Show list of tags.
   for tag in api.get_tags():
-    print(tag['name'])
+    print(tag)
 
   # Show list of pages.
   for page in api.get_list():
-    print(page['name'])
+    print(page)
 
   # Show list of pages tagged with 'tag01'.
   for page in api.get_list('tag01'):
-    print(page['name'])
+    print(page)
 
   # Show source of page ID 14.
   print(api.get_source(14))
@@ -69,6 +69,16 @@ Python API provides access to @wiki features.
   # Show results of wiki search.
   for result in api.search('test'):
     print(result)
+
+Hints
+-----
+
+* Always use an appropraite interval between requests, or your IP address may get banned.
+  Empirically, 10 seconds of sleep between API call is sufficient.
+* Your application must expect that entries returned from APIs may be duplicate/missing when pages/tags are added/removed during API call.
+  This is because listing requests are internally pagerized and it is costly to guarantee consistency.
+* AtWiki's specification may change anytime.
+  If you are going to build an automated system, it is encouraged to run test suites included with the installation of this library (``python -m unittest discover atwiki``) everytime before running your application.
 
 License
 -------
