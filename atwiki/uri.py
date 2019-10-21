@@ -62,8 +62,11 @@ class AtWikiURI(object):
     else:
       return '{0}/search'.format(self._base)
 
-  def tag(self, tag_name='', index=0):
-    return '{0}/tag/{1}?p={2}'.format(self._base, urlquote(tag_name), index)
+  def tag(self, tag_name='', sort='tag', index=0):
+    if sort not in ['tag', 'num']:
+      raise ValueError('invalid sort: {}'.format(sort))
+    return '{0}/tag/{1}?p={2}&sort={3}'.format(
+        self._base, urlquote(tag_name), index, sort)
 
   def new(self):
     return '{0}/new'.format(self._base)
@@ -72,6 +75,8 @@ class AtWikiURI(object):
     """
     ``sort`` can be any of ``update``, ``create``, ``create_desc`` or ``pagename``.
     """
+    if sort not in ['update', 'create', 'create_desc', 'pagename']:
+      raise ValueError('invalid sort: {}'.format(sort))
     return '{0}/list?sort={1}&pp={2}'.format(self._base, sort, index)
 
   def contact(self):

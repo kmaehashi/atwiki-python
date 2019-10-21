@@ -33,7 +33,7 @@ class AtWikiAPI(object):
       count = 0
       is_end = True
       if tag:
-        soup = self._request(self._uri.tag(tag, index))
+        soup = self._request(self._uri.tag(tag, index=index))
         links = soup.find('div', attrs={'class': 'cmd_tag'}).findAll('a', href=True)
         is_end = False
       else:
@@ -60,7 +60,7 @@ class AtWikiAPI(object):
     index = 0
     while True:
       count = 0
-      soup = self._request(self._uri.tag('', index))
+      soup = self._request(self._uri.tag('', index=index))
       links = soup.find('div', attrs={'class': 'cmd_tag'}).findAll('a', attrs={'class': 'tag'})
       for link in links:
         tag_name = link.text
@@ -79,8 +79,9 @@ class AtWikiAPI(object):
         assert index == 0
         break
       pagers = pagerArea.findAll('a')
-      if len(pagers) == 1:
-        if pagers[0].attrs['href'].endswith('/?p={}'.format(index - 1)):
+      assert 1 <= len(pagers) <= 2
+      if (len(pagers) == 1 and
+            pagers[0].attrs['href'].endswith('/?p={}'.format(index - 1))):
           # Valid pager found, and no more tags.
           break
       index += 1
@@ -90,12 +91,22 @@ class AtWikiAPI(object):
     soup = self._request(self._uri.backup_source(page_id, generation))
     pre = soup.find('pre', attrs={'class': 'cmd_backup'})
     if not pre:
-      raise IndexError('page {0}: generation {1} out of range'.format(page_id, generation))
+      raise IndexError(
+          'source could not be retrieved: '
+          'page ID {0} or generation {2} may be out of range'.format(
+              page_id, generation))
     return pre.text.replace('\r', '')
 
   def search(self, keyword, is_and=True, wiki_syntax=False, complete=True):
     soup = self._request(self._uri.search(keyword, is_and, wiki_syntax, complete))
-    lis = soup.find('div', id='wikibody').findAll('li')[:-1]  # drop last item (link to https://atwiki.jp/wiki/<keyword>)
+    lis = soup.find('div', id='wikibody').findAll('li')
+    assert 0 < len(lis)
+    if len(lis) == 1:
+      # No hits.
+      assert lis.pop().find('a') is None
+    else:
+      # Drop last item (link to https://atwiki.jp/wiki/<keyword>)
+      assert self._uri.get_absolute_uri(lis.pop().find('a').attrs['href']).startswith('https://atwiki.jp/wiki/')
     for li in lis:
       a = li.find('a')
       if not a: continue
@@ -114,4 +125,10 @@ class AtWikiAPI(object):
 
   def _request(self, url, data=None):
     req = Request(url, headers={'User-Agent': self._user_agent}, data=data)
-    return BeautifulSoup(urlopen(req).read(), 'html5lib')
+    soup = BeautifulSoup(urlopen(req).read(), 'html5lib')
+
+    # Check for fatal errors (e.g., banned).
+    err = soup.find('p', {'class': 'error'})
+    if err is not None:
+      raise RuntimeError('fatal error: {}'.format(err.text))
+    return soup
