@@ -31,5 +31,6 @@ jobs:
 
       - name: Run tests
         run: |
+          pip install pytest
           python -m pytest atwiki
           atwiki-dump --help
