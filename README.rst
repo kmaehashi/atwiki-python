@@ -1,7 +1,7 @@
-|Travis|_ |Coveralls|_ |PyPi|_
+|GitHubActions|_ |Coveralls|_ |PyPi|_
 
-.. |Travis| image:: https://api.travis-ci.org/kmaehashi/atwiki-python.svg?branch=master
-.. _Travis: https://travis-ci.org/kmaehashi/atwiki-python
+.. |GitHubActions| image:: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml/badge.svg?branch=master
+.. _GitHubActions: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml
 
 .. |Coveralls| image:: https://coveralls.io/repos/kmaehashi/atwiki-python/badge.svg?branch=master&service=github
 .. _Coveralls: https://coveralls.io/r/kmaehashi/atwiki-python
