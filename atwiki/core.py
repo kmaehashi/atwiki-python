@@ -21,6 +21,7 @@ from .uri import AtWikiURI
 
 class AtWikiAPI(object):
   _PAGER_PATTERN = re.compile(r'.+?(\d+).+?(\d+).+?(\d+).+?')  # "計 110 ページ / 1 から 100 を表示"
+  _TAG_WEIGHT_PATTERN = re.compile(r'\((\d+)\)$')  # "タグ名(1)"
 
   def __init__(self, uri, **kwargs):
     self._uri = uri
@@ -57,7 +58,7 @@ class AtWikiAPI(object):
       time.sleep(self._sleep)
 
   def get_tags(self):
-    index = 0
+    index = 1
     while True:
       count = 0
       soup = self._request(self._uri.tag('', index))
@@ -65,24 +66,17 @@ class AtWikiAPI(object):
       for link in links:
         tag_name = link.text
         tag_weight = 0
-        for clazz in link.attrs['class']:
-          if clazz.startswith('weight'):
-            tag_weight = int(clazz[6:])
-            break
+        m = self._TAG_WEIGHT_PATTERN.search(link.attrs['title'])
+        if m:
+          tag_weight = int(m.group(1))
         count += 1
         yield {'name': tag_name, 'weight': tag_weight}
       if count == 0: break
 
-      pagerArea = soup.find('div', attrs={'class': 'cmd_tag'}).find('div')
-      if pagerArea is None:
-        # Pager area will not be shown when tag list fits in one page.
-        assert index == 0
+      # Find "次の500件" link.
+      pager = soup.find('div', attrs={'class': 'cmd_tag'}).select_one('a[href$="/tag/?p={}"]'.format(index + 1))
+      if not pager:
         break
-      pagers = pagerArea.findAll('a')
-      if len(pagers) == 1:
-        if pagers[0].attrs['href'].endswith('/?p={}'.format(index - 1)):
-          # Valid pager found, and no more tags.
-          break
       index += 1
       time.sleep(self._sleep)
 
