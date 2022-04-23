@@ -6,13 +6,13 @@ from unittest import TestCase
 
 from atwiki.parser import AtWikiStripper
 
-INPUT = '''
+INPUT = r"""
 // This is a comment.
 
 &nivocideo(url) &color(#ffffff){white} and black
 
 [[Link1]] / [[Link2>URL]]
-Styles: ''bold'' \'\'\'italic\'\'\' %%del%% ''bold'' 
+Styles: ''bold'' '''italic''' %%del%% ''bold'' 
 Special: '' A ✔︎ ( ) { } \ / ! '' 
 
 
@@ -36,9 +36,9 @@ block 1
 #exk(){{{{{
 block 2
 }}}}}
-'''
+"""
 
-OUTPUT = '''
+OUTPUT = r"""
 
 white and black
 
@@ -62,8 +62,7 @@ quote 2
 pre
 
 block 1
-block 2\
-'''
+block 2"""
 
 class AtWikiStripperTest(TestCase):
   def test_doc(self):
