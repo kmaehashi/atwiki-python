@@ -35,6 +35,7 @@ setup(name='atwiki-python',
       entry_points={
           'console_scripts': ['atwiki-dump=atwiki.tools.dump:main'],
       },
+      python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*',
       install_requires=[
           'BeautifulSoup4',
           'html5lib',
