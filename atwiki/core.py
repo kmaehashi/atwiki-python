@@ -20,7 +20,6 @@ from bs4 import BeautifulSoup
 from .uri import AtWikiURI
 
 class AtWikiAPI(object):
-  _PAGER_PATTERN = re.compile(r'.+?(\d+).+?(\d+).+?(\d+).+?')  # "計 110 ページ / 1 から 100 を表示"
   _TAG_WEIGHT_PATTERN = re.compile(r'\((\d+)\)$')  # "タグ名(1)"
 
   def __init__(self, uri, **kwargs):
@@ -29,24 +28,20 @@ class AtWikiAPI(object):
     self._sleep = kwargs.get('sleep', 10)
 
   def get_list(self, tag=None):
-    index = 0
+    index = 1
     while True:
       count = 0
-      is_end = True
       if tag:
         soup = self._request(self._uri.tag(tag, index))
-        links = soup.find('div', attrs={'class': 'cmd_tag'}).findAll('a', href=True)
-        is_end = False
+        links = soup.find('div', attrs={'class': 'cmd_tag'}).find('ul').select('a')
+        pager = soup.find('div', attrs={'class': 'cmd_tag'}).select_one('a[href$="?&p={}"]'.format(index + 1))
       else:
         soup = self._request(self._uri.list('create', index))
         links = soup.find('table', attrs={'class': 'pagelist'}).findAll('a', href=True, title=True)
-        pager = soup.find('div', attrs={'class': 'pagelist'}).findAll('p')[2].text
-        m = self._PAGER_PATTERN.search(pager)
-        if m:
-          (total, cursor_begin, cursor_end) = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
-          is_end = (total == cursor_end)
-        else:
-          is_end = True
+        pager = soup.find('ul', attrs={'class': 'atwiki_pagination'})
+        if pager is not None:
+          pager = pager.select_one('a[href$="&pp={}"]'.format(index + 1))
+      is_end = (pager is None or len(links) == 0)
       for link in links:
         page_id = self._uri.get_page_id_from_uri(link.attrs['href'])
         page_name = link.text.strip()

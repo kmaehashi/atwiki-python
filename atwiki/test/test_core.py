@@ -15,7 +15,7 @@ class AtWikiAPITest(TestCase):
 
   def test_get_list(self):
     results = list(self._api.get_list())
-    self.assertTrue(1 < len(results))
+    self.assertEqual(len(results), 19)
 
   def test_get_list_tag(self):
     results = list(self._api.get_list('tag01'))
