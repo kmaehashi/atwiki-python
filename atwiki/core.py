@@ -25,7 +25,8 @@ class AtWikiAPI(object):
   def __init__(self, uri, **kwargs):
     self._uri = uri
     self._user_agent = kwargs.get('user_agent', 'Mozilla/5.0 (AtWikiPython)')
-    self._sleep = kwargs.get('sleep', 10)
+    self._sleep = kwargs.get('sleep', 10)  # in seconds
+    self._last_request = 0.0  # epoch second last request has made
 
   def get_list(self, tag=None, _start=1):
     index = _start
@@ -50,7 +51,6 @@ class AtWikiAPI(object):
           yield {'id': page_id, 'name': page_name}
       if count == 0 or is_end: break
       index += 1
-      time.sleep(self._sleep)
 
   def get_tags(self, sort='', _start=1):
     index = _start
@@ -73,7 +73,6 @@ class AtWikiAPI(object):
       if not pager:
         break
       index += 1
-      time.sleep(self._sleep)
 
   def get_source(self, page_id, generation=0):
     soup = self._request(self._uri.backup_source(page_id, generation))
@@ -103,4 +102,8 @@ class AtWikiAPI(object):
 
   def _request(self, url, data=None):
     req = Request(url, headers={'User-Agent': self._user_agent}, data=data)
+    sleep = self._last_request + self._sleep - time.time()
+    if 0 < sleep:
+      time.sleep(sleep)
+    self._last_request = time.time()
     return BeautifulSoup(urlopen(req).read(), 'html5lib')
