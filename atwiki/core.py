@@ -20,7 +20,7 @@ from bs4 import BeautifulSoup
 from .uri import AtWikiURI
 
 class AtWikiAPI(object):
-  _PAGER_PATTERN = re.compile(r'.+?(\d+).+?(\d+).+?(\d+).+?')  # "計 110 ページ / 1 から 100 を表示"
+  _TAG_WEIGHT_PATTERN = re.compile(r'\((\d+)\)$')  # "タグ名(1)"
 
   def __init__(self, uri, **kwargs):
     self._uri = uri
@@ -28,24 +28,20 @@ class AtWikiAPI(object):
     self._sleep = kwargs.get('sleep', 10)
 
   def get_list(self, tag=None):
-    index = 0
+    index = 1
     while True:
       count = 0
-      is_end = True
       if tag:
         soup = self._request(self._uri.tag(tag, index))
-        links = soup.find('div', attrs={'class': 'cmd_tag'}).findAll('a', href=True)
-        is_end = False
+        links = soup.find('div', attrs={'class': 'cmd_tag'}).find('ul').select('a')
+        pager = soup.find('div', attrs={'class': 'cmd_tag'}).select_one('a[href$="?&p={}"]'.format(index + 1))
       else:
         soup = self._request(self._uri.list('create', index))
         links = soup.find('table', attrs={'class': 'pagelist'}).findAll('a', href=True, title=True)
-        pager = soup.find('div', attrs={'class': 'pagelist'}).findAll('p')[2].text
-        m = self._PAGER_PATTERN.search(pager)
-        if m:
-          (total, cursor_begin, cursor_end) = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
-          is_end = (total == cursor_end)
-        else:
-          is_end = True
+        pager = soup.find('ul', attrs={'class': 'atwiki_pagination'})
+        if pager is not None:
+          pager = pager.select_one('a[href$="&pp={}"]'.format(index + 1))
+      is_end = (pager is None or len(links) == 0)
       for link in links:
         page_id = self._uri.get_page_id_from_uri(link.attrs['href'])
         page_name = link.text.strip()
@@ -57,7 +53,7 @@ class AtWikiAPI(object):
       time.sleep(self._sleep)
 
   def get_tags(self):
-    index = 0
+    index = 1
     while True:
       count = 0
       soup = self._request(self._uri.tag('', index))
@@ -65,24 +61,17 @@ class AtWikiAPI(object):
       for link in links:
         tag_name = link.text
         tag_weight = 0
-        for clazz in link.attrs['class']:
-          if clazz.startswith('weight'):
-            tag_weight = int(clazz[6:])
-            break
+        m = self._TAG_WEIGHT_PATTERN.search(link.attrs['title'])
+        if m:
+          tag_weight = int(m.group(1))
         count += 1
         yield {'name': tag_name, 'weight': tag_weight}
       if count == 0: break
 
-      pagerArea = soup.find('div', attrs={'class': 'cmd_tag'}).find('div')
-      if pagerArea is None:
-        # Pager area will not be shown when tag list fits in one page.
-        assert index == 0
+      # Find "次の500件" link.
+      pager = soup.find('div', attrs={'class': 'cmd_tag'}).select_one('a[href$="/tag/?p={}"]'.format(index + 1))
+      if not pager:
         break
-      pagers = pagerArea.findAll('a')
-      if len(pagers) == 1:
-        if pagers[0].attrs['href'].endswith('/?p={}'.format(index - 1)):
-          # Valid pager found, and no more tags.
-          break
       index += 1
       time.sleep(self._sleep)
 
