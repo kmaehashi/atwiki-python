@@ -62,13 +62,21 @@ class AtWikiURI(object):
     else:
       return '{0}/search'.format(self._base)
 
-  def tag(self, tag_name='', index=0):
+  def tags(self, sort='', index=1):
+    return '{}/tag/?sort={}&p={}'.format(self._base, sort, index)
+
+  def tag(self, tag_name='', index=1):
+    if tag_name == '':
+      warnings.warn(
+        'Specifying empty string to tag_name to get URL for list of tags is deprecated.'
+        ' Use .tags() instead.',
+        DeprecationWarning)
     return '{0}/tag/{1}?p={2}'.format(self._base, urlquote(tag_name), index)
 
   def new(self):
     return '{0}/new'.format(self._base)
 
-  def list(self, sort='update', index=0):
+  def list(self, sort='update', index=1):
     """
     ``sort`` can be any of ``update``, ``create``, ``create_desc`` or ``pagename``.
     """
