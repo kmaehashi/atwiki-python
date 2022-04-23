@@ -56,7 +56,7 @@ class AtWikiAPI(object):
     index = 1
     while True:
       count = 0
-      soup = self._request(self._uri.tag('', index))
+      soup = self._request(self._uri.tags('', index))
       links = soup.find('div', attrs={'class': 'cmd_tag'}).findAll('a', attrs={'class': 'tag'})
       for link in links:
         tag_name = link.text
