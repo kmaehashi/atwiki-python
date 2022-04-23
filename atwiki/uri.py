@@ -9,7 +9,11 @@ try:
 except:
   # Python 2
   import urlparse
-  from urllib import quote as urlquote
+  def urlquote(s, safe=b'/'):
+    import urllib
+    if isinstance(s, unicode):
+      s = s.encode('utf-8')
+    return urllib.quote(s, safe)
 
 import os.path
 import warnings

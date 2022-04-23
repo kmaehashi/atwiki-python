@@ -27,8 +27,8 @@ class AtWikiAPI(object):
     self._user_agent = kwargs.get('user_agent', 'Mozilla/5.0 (AtWikiPython)')
     self._sleep = kwargs.get('sleep', 10)
 
-  def get_list(self, tag=None):
-    index = 1
+  def get_list(self, tag=None, _start=1):
+    index = _start
     while True:
       count = 0
       if tag:
@@ -52,11 +52,11 @@ class AtWikiAPI(object):
       index += 1
       time.sleep(self._sleep)
 
-  def get_tags(self):
-    index = 1
+  def get_tags(self, sort='', _start=1):
+    index = _start
     while True:
       count = 0
-      soup = self._request(self._uri.tags('', index))
+      soup = self._request(self._uri.tags(sort, index))
       links = soup.find('div', attrs={'class': 'cmd_tag'}).findAll('a', attrs={'class': 'tag'})
       for link in links:
         tag_name = link.text
