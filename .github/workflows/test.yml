@@ -31,6 +31,12 @@ jobs:
 
       - name: Run tests
         run: |
-          pip install pytest
-          python -m pytest atwiki
+          pip install pytest pytest-cov
+          python -m pytest --cov --cov-branch atwiki
           atwiki-dump --help
+
+      - name: Upload Coverage
+        run: |
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov
