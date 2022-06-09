@@ -1,4 +1,4 @@
-|GitHubActions|_ |Coveralls|_ |PyPi|_
+|GitHubActions|_ |CodeCov|_ |PyPi|_
 
 .. |GitHubActions| image:: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml/badge.svg?branch=master
 .. _GitHubActions: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml
