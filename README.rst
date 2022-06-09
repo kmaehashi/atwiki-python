@@ -3,8 +3,8 @@
 .. |GitHubActions| image:: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml/badge.svg?branch=master
 .. _GitHubActions: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml
 
-.. |Coveralls| image:: https://coveralls.io/repos/kmaehashi/atwiki-python/badge.svg?branch=master&service=github
-.. _Coveralls: https://coveralls.io/r/kmaehashi/atwiki-python
+.. |CodeCov| image:: https://codecov.io/gh/kmaehashi/atwiki-python/branch/master/graph/badge.svg
+.. _CodeCov: https://codecov.io/gh/kmaehashi/atwiki-python
 
 .. |PyPi| image:: https://badge.fury.io/py/atwiki-python.svg
 .. _PyPi: https://badge.fury.io/py/atwiki-python
