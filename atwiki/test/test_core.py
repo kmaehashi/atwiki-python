@@ -42,7 +42,7 @@ class AtWikiAPITest(TestCase):
                      '"テスト1"<br>&\n"テスト2"<br>&')
 
   def test_get_source_invalid(self):
-    self.assertRaises(IndexError, self._api.get_source, 15, -1)
+    self.assertRaises(IndexError, self._api.get_source, 15, 100000)
 
   def test_search(self):
     results = list(self._api.search('SearchKeyword01 SearchKeyword02'))
@@ -84,7 +84,7 @@ class PagerizeTest(TestCase):
         # N.B. The page counter is not updated immediately.
         pages = list(self._api.get_list(_start=last_index))
         expected = (count % 100)
-        assert (expected - 5) < len(pages) < (expected + 5)
+        assert max(0, (expected - 50)) < len(pages) < min(100, (expected + 50))
 
         top_page = next(self._api.get_list(_start=last_index + 1))
         assert top_page == {'id': 1, 'name': 'トップページ'}
