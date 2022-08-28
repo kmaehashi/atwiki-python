@@ -10,6 +10,7 @@ except ImportError:
   from urllib2 import urlopen, Request
 
 import re
+import threading
 import time
 from collections import namedtuple
 
@@ -26,7 +27,8 @@ class AtWikiAPI(object):
     self._uri = uri
     self._user_agent = kwargs.get('user_agent', 'Mozilla/5.0 (AtWikiPython)')
     self._sleep = kwargs.get('sleep', 10)  # in seconds
-    self._last_request = 0.0  # epoch second last request has made
+    self._last_request = 0.0  # epoch second at completion of the last request
+    self._lock = threading.Lock()
 
   def get_list(self, tag=None, _start=1):
     index = _start
@@ -102,8 +104,10 @@ class AtWikiAPI(object):
 
   def _request(self, url, data=None):
     req = Request(url, headers={'User-Agent': self._user_agent}, data=data)
-    sleep = self._last_request + self._sleep - time.time()
-    if 0 < sleep:
-      time.sleep(sleep)
-    self._last_request = time.time()
-    return BeautifulSoup(urlopen(req).read(), 'html5lib')
+    with self._lock:
+      sleep = self._last_request + self._sleep - time.time()
+      if 0 < sleep:
+        time.sleep(sleep)
+      content = urlopen(req).read()
+      self._last_request = time.time()
+    return BeautifulSoup(content, 'html5lib')
