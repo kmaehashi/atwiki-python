@@ -1,13 +1,13 @@
 |GitHubActions|_ |CodeCov|_ |PyPi|_
 
 .. |GitHubActions| image:: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml/badge.svg?branch=master
-.. _GitHubActions: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml
+.. _GitHubActions: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml?query=branch%3Amaster
 
 .. |CodeCov| image:: https://codecov.io/gh/kmaehashi/atwiki-python/branch/master/graph/badge.svg
 .. _CodeCov: https://codecov.io/gh/kmaehashi/atwiki-python
 
-.. |PyPi| image:: https://badge.fury.io/py/atwiki-python.svg
-.. _PyPi: https://badge.fury.io/py/atwiki-python
+.. |PyPI| image:: https://badge.fury.io/py/atwiki-python.svg
+.. _PyPI: https://pypi.org/project/atwiki-python
 
 atwiki-python
 =============
@@ -53,28 +53,29 @@ Python API provides access to @wiki features.
 
   # Show list of tags.
   for tag in api.get_tags():
-    print(tag)
+      print(tag)
 
   # Show list of pages.
   for page in api.get_list():
-    print(page)
+      print(page)
 
   # Show list of pages tagged with 'tag01'.
   for page in api.get_list('tag01'):
-    print(page)
+      print(page)
 
   # Show source of page ID 14.
   print(api.get_source(14))
 
   # Show results of wiki search.
   for result in api.search('test'):
-    print(result)
+      print(result)
 
 Hints
 -----
 
 * Always use an appropraite interval between requests, or your IP address may get banned.
   Empirically, 10 seconds of sleep between API call is sufficient.
+  Each ``AtWikiAPI`` instance automatically injects a delay between requests.
 * Your application must expect that entries returned from APIs may be duplicate/missing when pages/tags are added/removed during API call.
   This is because listing requests are internally pagerized and it is costly to guarantee consistency.
 * AtWiki's specification may change anytime.
