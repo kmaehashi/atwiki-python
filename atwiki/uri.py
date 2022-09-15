@@ -98,7 +98,7 @@ class AtWikiURI(object):
     if page_id is not None:
       url += '&pageid={0}'.format(page_id)
     if generation is not None:
-      url += '&num={0}'.format(generation)
+      url += '&id={0}'.format(generation)
     return url
 
   def backup_list(self, page_id=None):

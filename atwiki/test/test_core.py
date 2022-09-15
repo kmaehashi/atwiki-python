@@ -34,7 +34,7 @@ class AtWikiAPITest(TestCase):
   def test_get_source(self):
     self.assertEqual(self._api.get_source(14, 0),
                      'テスト1\nテスト2\n\nテスト3\nテスト4\n\n\nテスト5')
-    self.assertEqual(self._api.get_source(14, 1),
+    self.assertEqual(self._api.get_source(14, 3),
                      'テスト1\nテスト2\n\nテスト3\nテスト4')
 
   def test_get_source_special(self):

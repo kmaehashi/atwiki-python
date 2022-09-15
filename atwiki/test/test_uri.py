@@ -18,7 +18,7 @@ class AtWikiURITest(TestCase):
     uri = AtWikiURI(base)
 
     self.assertEqual(uri.get_page_id_from_uri('{0}/backupx/123/list.html'.format(base)), 123)
-    self.assertEqual(uri.get_page_id_from_uri('{0}/?cmd=backup&action=show&pageid=456&num=1'.format(base)), 456)
+    self.assertEqual(uri.get_page_id_from_uri('{0}/?cmd=backup&action=show&pageid=456&num=0'.format(base)), 456)
     self.assertEqual(uri.get_page_id_from_uri('{0}/pages/789.html'.format(base)), 789)
 
   def test_path_output(self):
@@ -43,10 +43,10 @@ class AtWikiURITest(TestCase):
 
     self.assertEqual(uri.backup_list(), '{0}/?cmd=backup&action=list'.format(base))
     self.assertEqual(uri.backup_list(10), '{0}/?cmd=backup&action=list&pageid=10'.format(base))
-    self.assertEqual(uri.backup_source(10, 1), '{0}/?cmd=backup&action=source&pageid=10&num=1'.format(base))
-    self.assertEqual(uri.backup_show(10, 1), '{0}/?cmd=backup&action=show&pageid=10&num=1'.format(base))
-    self.assertEqual(uri.backup_diff(10, 1), '{0}/?cmd=backup&action=diff&pageid=10&num=1'.format(base))
-    self.assertEqual(uri.backup_nowdiff(10, 1), '{0}/?cmd=backup&action=nowdiff&pageid=10&num=1'.format(base))
+    self.assertEqual(uri.backup_source(10, 1), '{0}/?cmd=backup&action=source&pageid=10&id=1'.format(base))
+    self.assertEqual(uri.backup_show(10, 1), '{0}/?cmd=backup&action=show&pageid=10&id=1'.format(base))
+    self.assertEqual(uri.backup_diff(10, 1), '{0}/?cmd=backup&action=diff&pageid=10&id=1'.format(base))
+    self.assertEqual(uri.backup_nowdiff(10, 1), '{0}/?cmd=backup&action=nowdiff&pageid=10&id=1'.format(base))
 
     self.assertEqual(uri.page(10), '{0}/pages/10.html'.format(base))
     self.assertEqual(uri.diff(10), '{0}/diffx/10.html'.format(base))
