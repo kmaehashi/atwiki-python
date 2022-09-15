@@ -34,7 +34,7 @@ class AtWikiAPITest(TestCase):
   def test_get_source(self):
     self.assertEqual(self._api.get_source(14, 0),
                      'テスト1\nテスト2\n\nテスト3\nテスト4\n\n\nテスト5')
-    self.assertEqual(self._api.get_source(14, 1),
+    self.assertEqual(self._api.get_source(14, 3),
                      'テスト1\nテスト2\n\nテスト3\nテスト4')
 
   def test_get_source_special(self):
@@ -93,9 +93,11 @@ class PagerizeTest(TestCase):
         soup = self._api._request(self._uri.tag('曲', index=1))
         last_index = 1
         for link in soup.find('div', class_='cmd_tag').find_all('a'):
-            if not link.attrs['href'].endswith('&p={}'.format(last_index + 1)):
+            if not link.attrs['href'].endswith('?p={}'.format(last_index + 1)):
                 break
             last_index += 1
+        assert 750 <= last_index
+
         pages = list(self._api.get_list('曲', _start=last_index))
         assert 1 <= len(pages) <= 50
 
