@@ -93,9 +93,11 @@ class PagerizeTest(TestCase):
         soup = self._api._request(self._uri.tag('曲', index=1))
         last_index = 1
         for link in soup.find('div', class_='cmd_tag').find_all('a'):
-            if not link.attrs['href'].endswith('&p={}'.format(last_index + 1)):
+            if not link.attrs['href'].endswith('?p={}'.format(last_index + 1)):
                 break
             last_index += 1
+        assert 750 <= last_index
+
         pages = list(self._api.get_list('曲', _start=last_index))
         assert 1 <= len(pages) <= 50
 
