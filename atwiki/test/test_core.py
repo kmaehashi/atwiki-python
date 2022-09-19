@@ -98,6 +98,14 @@ class PagerizeTest(TestCase):
             last_index += 1
         assert 750 <= last_index
 
+        count = 0
+        for page in self._api.get_list('曲'):
+            count += 1
+            if 100 < count:
+                break
+        else:
+            assert False, "unexpected number of pages for the tag"
+
         pages = list(self._api.get_list('曲', _start=last_index))
         assert 1 <= len(pages) <= 50
 
