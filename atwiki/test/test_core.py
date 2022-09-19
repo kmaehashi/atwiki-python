@@ -129,9 +129,20 @@ class PagerizeTest(TestCase):
         assert len(pages) == 0
 
     def test_get_tags(self):
+        # Get the first tag from the first listing.
         song = next(self._api.get_tags('num'))
         assert song['name'] == '曲'
         assert 35000 < song['weight'] < 70000
 
+        # Get the first tag from the second listing.
         not_song = next(self._api.get_tags('num', _start=2))
         assert not_song['name'] != '曲'
+
+        # Ensure listing pagerize works. (retrieve 3 listing, 500 pages in each)
+        count = 0
+        for page in self._api.get_tags():
+            count += 1
+            if 500*3 <= count:
+                break
+        else:
+            assert False, "unexpected number of tags"
