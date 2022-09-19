@@ -37,7 +37,7 @@ class AtWikiAPI(object):
       if tag:
         soup = self._request(self._uri.tag(tag, index))
         links = soup.find('div', attrs={'class': 'cmd_tag'}).find('ul').select('a')
-        pager = soup.find('div', attrs={'class': 'cmd_tag'}).select_one('a[href$="?&p={}"]'.format(index + 1))
+        pager = soup.find('div', attrs={'class': 'cmd_tag'}).select_one('a[href$="?p={}"]'.format(index + 1))
       else:
         soup = self._request(self._uri.list('create', index))
         links = soup.find('table', attrs={'class': 'pagelist'}).findAll('a', href=True, title=True)
