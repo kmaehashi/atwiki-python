@@ -69,9 +69,11 @@ class PagerizeTest(TestCase):
         self._api = AtWikiAPI(self._uri)
 
     def test_get_list(self):
+        # Get the first page from the first listing.
         top_page = next(self._api.get_list())
         assert top_page == {'id': 1, 'name': 'トップページ'}
 
+        # Detect number of all pages.
         soup = self._api._request(self._uri.list(sort='create', index=1))
         text = soup.find('div', class_='pagelist').text
         m = re.search(r'計 (\d+) ページ / 1 から 100 を表示', text)
@@ -80,16 +82,27 @@ class PagerizeTest(TestCase):
         assert 45000 < count < 90000
         last_index = math.ceil(count / 100)
 
-        # Get list from the last page.
+        # Ensure listing pagerize works. (retrieve 3 listing, 100 pages in each)
+        count = 0
+        for page in self._api.get_list():
+            count += 1
+            if 100*3 <= count:
+                break
+        else:
+            assert False, "unexpected number of pages"
+
+        # Get list from the last listing.
         # N.B. The page counter is not updated immediately.
         pages = list(self._api.get_list(_start=last_index))
         expected = (count % 100)
         assert max(0, (expected - 50)) < len(pages) < min(100, (expected + 50))
 
+        # Get out-of-bounds listing. (expected to wrap around)
         top_page = next(self._api.get_list(_start=last_index + 1))
         assert top_page == {'id': 1, 'name': 'トップページ'}
 
     def test_get_list_tag(self):
+        # Detect number of listings.
         soup = self._api._request(self._uri.tag('曲', index=1))
         last_index = 1
         for link in soup.find('div', class_='cmd_tag').find_all('a'):
@@ -98,17 +111,20 @@ class PagerizeTest(TestCase):
             last_index += 1
         assert 750 <= last_index
 
+        # Ensure listing pagerize works. (retrieve 3 listing, 50 pages in each)
         count = 0
         for page in self._api.get_list('曲'):
             count += 1
-            if 100 < count:
+            if 50*3 <= count:
                 break
         else:
             assert False, "unexpected number of pages for the tag"
 
+        # Get list from the last listing.
         pages = list(self._api.get_list('曲', _start=last_index))
         assert 1 <= len(pages) <= 50
 
+        # Get out-of-bounds listing.
         pages = list(self._api.get_list('曲', _start=last_index + 1))
         assert len(pages) == 0
 
