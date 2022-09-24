@@ -36,7 +36,7 @@ jobs:
       - name: Run tests
         run: |
           pip install pytest pytest-cov
-          python -m pytest --cov --cov-branch atwiki
+          python -m pytest -rfEX --showlocals --cov --cov-branch atwiki
           atwiki-dump --help
 
       - name: Upload Coverage
