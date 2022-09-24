@@ -78,9 +78,9 @@ class PagerizeTest(TestCase):
         text = soup.find('div', class_='pagelist').text
         m = re.search(r'計 (\d+) ページ / 1 から 100 を表示', text)
         assert m is not None
-        count = int(m.group(1))
-        assert 45000 < count < 90000
-        last_index = math.ceil(count / 100)
+        total_count = int(m.group(1))  # Total number of pages
+        assert 45000 < total_count < 90000
+        last_index = math.ceil(total_count / 100)
 
         # Ensure listing pagerize works. (retrieve 3 listing, 100 pages in each)
         count = 0
@@ -94,7 +94,7 @@ class PagerizeTest(TestCase):
         # Get list from the last listing.
         # N.B. The page counter is not updated immediately.
         pages = list(self._api.get_list(_start=last_index))
-        expected = (count % 100)
+        expected = (total_count % 100)
         assert max(0, (expected - 50)) < len(pages) < min(100, (expected + 50))
 
         # Get out-of-bounds listing. (expected to wrap around)
