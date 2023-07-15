@@ -22,7 +22,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist
-          path: dist/
+          path: dist
 
   publish:
     needs: build
@@ -37,5 +37,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist
+      - name: Enumerate Files
+        run: find .
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
