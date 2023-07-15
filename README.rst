@@ -1,9 +1,9 @@
 |GitHubActions|_ |CodeCov|_ |PyPi|_
 
-.. |GitHubActions| image:: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml/badge.svg?branch=master
-.. _GitHubActions: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml?query=branch%3Amaster
+.. |GitHubActions| image:: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml/badge.svg?branch=main
+.. _GitHubActions: https://github.com/kmaehashi/atwiki-python/actions/workflows/test.yml?query=branch%3Amain
 
-.. |CodeCov| image:: https://codecov.io/gh/kmaehashi/atwiki-python/branch/master/graph/badge.svg
+.. |CodeCov| image:: https://codecov.io/gh/kmaehashi/atwiki-python/branch/main/graph/badge.svg
 .. _CodeCov: https://codecov.io/gh/kmaehashi/atwiki-python
 
 .. |PyPI| image:: https://badge.fury.io/py/atwiki-python.svg
