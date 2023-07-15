@@ -37,7 +37,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist
+          path: dist
       - name: Enumerate Files
-        run: find .
+        run: find dist -ls
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
