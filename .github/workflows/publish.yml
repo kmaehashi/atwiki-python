@@ -5,13 +5,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-22.04
-    environment:
-      name: release
-      url: https://pypi.org/project/atwiki-python/
-    permissions:
-      id-token: write
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
@@ -23,5 +18,24 @@ jobs:
         run: python3 -m pip install build --user
       - name: Build Packages
         run: python3 -m build --sdist --wheel --outdir dist/ .
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-22.04
+    environment:
+      name: release
+      url: https://pypi.org/project/atwiki-python/
+    permissions:
+      id-token: write
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
