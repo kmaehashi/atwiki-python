@@ -3,13 +3,19 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import math
+import os
 import re
+import unittest
 from unittest import TestCase
 
 from atwiki.core import AtWikiAPI
 from atwiki.uri import AtWikiURI
 
 from . import TEST_BASE_URI
+
+
+skip_search_tests = os.environ.get('ATWIKI_TEST_SEARCH_SKIP', '1') == '1'
+
 
 class AtWikiAPITest(TestCase):
   def setUp(self):
@@ -44,12 +50,14 @@ class AtWikiAPITest(TestCase):
   def test_get_source_invalid(self):
     self.assertRaises(IndexError, self._api.get_source, 15, 100000)
 
+  @unittest.skipIf(skip_search_tests, 'Skipping search tests')
   def test_search(self):
     results = list(self._api.search('SearchKeyword01 SearchKeyword02'))
     self.assertEqual(len(results), 1)
     self.assertEqual(results[0]['name'], 'Test_atwiki.test.test_core:AtWikiAPITest:test_search')
     self.assertEqual(results[0]['snippet'], 'SearchKeyword01  SearchKeyword02')
 
+  @unittest.skipIf(skip_search_tests, 'Skipping search tests')
   def test_search_or(self):
     results = list(self._api.search('SearchKeyword01 SearchKeyword02', False))
     self.assertEqual(len(results), 2)
